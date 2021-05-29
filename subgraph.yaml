@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -10,17 +10,20 @@ dataSources:
       abi: CapTableRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - capTableAdded
-        - capTableRemoved
+        - CapTableRegistry
+        - CapTable
+        - TokenBalance
       abis:
         - name: CapTableRegistry
           file: ./abis/CapTableRegistry.json
+        - name: ERC1400
+          file: ./abis/ERC1400.json
       eventHandlers:
         - event: capTableAdded(indexed address)
-          handler: handlecapTableAdded
+          handler: handleCapTableAdded
         - event: capTableRemoved(indexed address)
-          handler: handlecapTableRemoved
+          handler: handleCapTableRemoved
       file: ./src/mapping.ts

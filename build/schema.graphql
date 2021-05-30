@@ -1,0 +1,24 @@
+type CapTableRegistry @entity {
+  id: ID!
+  count: BigInt!
+  capTables: [CapTable!]! @derivedFrom(field: "registry")
+}
+
+type CapTable @entity {
+  id: ID!
+  registry: CapTableRegistry!
+  totalSupply: BigInt!
+  active: Boolean
+  owner: Bytes!
+  minter: Bytes!
+  controllers: [Bytes!]
+  orgnr: String!
+  tokenBalances: [TokenBalance!]
+}
+
+type TokenBalance @entity {
+  id: ID!
+  address: Bytes!
+  balance: BigInt!
+  partition: String!
+}

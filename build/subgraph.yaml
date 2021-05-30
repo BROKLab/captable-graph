@@ -12,18 +12,38 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
+      file: CapTableRegistry/CapTableRegistry.wasm
       entities:
         - CapTableRegistry
-        - CapTable
-        - TokenBalance
       abis:
         - name: CapTableRegistry
           file: CapTableRegistry/abis/CapTableRegistry.json
-        - name: ERC1400
-          file: CapTableRegistry/abis/ERC1400.json
       eventHandlers:
         - event: capTableAdded(indexed address)
           handler: handleCapTableAdded
         - event: capTableRemoved(indexed address)
           handler: handleCapTableRemoved
-      file: CapTableRegistry/CapTableRegistry.wasm
+templates:
+  - name: CapTable
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: ERC1400
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: templates/CapTable/CapTable.wasm
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: ERC1400
+          file: CapTable/abis/ERC1400.json
+      eventHandlers:
+        - event: TransferByPartition(indexed bytes32,address,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleTransferByPartition
+        - event: IssuedByPartition(indexed bytes32,indexed address,indexed
+            address,uint256,bytes,bytes)
+          handler: handleIssuedByPartition

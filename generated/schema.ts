@@ -59,6 +59,15 @@ export class CapTableRegistry extends Entity {
   set capTables(value: Array<string>) {
     this.set("capTables", Value.fromStringArray(value));
   }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
 }
 
 export class CapTable extends Entity {

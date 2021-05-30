@@ -12,18 +12,53 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
+      file: ./src/mapping.ts
       entities:
         - CapTableRegistry
-        - CapTable
-        - TokenBalance
       abis:
         - name: CapTableRegistry
           file: ./abis/CapTableRegistry.json
-        - name: ERC1400
-          file: ./abis/ERC1400.json
       eventHandlers:
         - event: capTableAdded(indexed address)
           handler: handleCapTableAdded
         - event: capTableRemoved(indexed address)
           handler: handleCapTableRemoved
-      file: ./src/mapping.ts
+templates:
+  - name: CapTable
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: ERC1400
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./src/captable.ts
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: ERC1400
+          file: ./abis/ERC1400.json
+      eventHandlers:
+        - event: TransferByPartition(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleTransferByPartition
+        - event: IssuedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleIssuedByPartition
+  # - Approval(indexed address,indexed address,uint256)
+  # - ApprovalByPartition(indexed bytes32,indexed address,indexed address,uint256)
+  # - AuthorizedOperator(indexed address,indexed address)
+  # - AuthorizedOperatorByPartition(indexed bytes32,indexed address,indexed address)
+  # - ChangedPartition(indexed bytes32,indexed bytes32,uint256)
+  # - Document(indexed bytes32,string,bytes32)
+  # - Issued(indexed address,indexed address,uint256,bytes)
+  # - IssuedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes,bytes)
+  # - MinterAdded(indexed address)
+  # - MinterRemoved(indexed address)
+  # - OwnershipTransferred(indexed address,indexed address)
+  # - Redeemed(indexed address,indexed address,uint256,bytes)
+  # - RedeemedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes)
+  # - RevokedOperator(indexed address,indexed address)
+  # - RevokedOperatorByPartition(indexed bytes32,indexed address,indexed address)
+  # - Transfer(indexed address,indexed address,uint256)
+  # - TransferByPartition(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)

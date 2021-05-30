@@ -2,6 +2,7 @@ type CapTableRegistry @entity {
   id: ID!
   count: BigInt!
   capTables: [CapTable!]! @derivedFrom(field: "registry")
+  address: Bytes!
 }
 
 type CapTable @entity {

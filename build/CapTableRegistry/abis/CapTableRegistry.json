@@ -20,7 +20,7 @@
         "type": "address"
       }
     ],
-    "name": "capTableAdded",
+    "name": "capTableApproved",
     "type": "event"
   },
   {
@@ -29,7 +29,45 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "capTableRemoved",
+        "name": "capTableAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "reason",
+        "type": "bytes32"
+      }
+    ],
+    "name": "capTableDeclined",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "capTableAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "uuid",
+        "type": "bytes32"
+      }
+    ],
+    "name": "capTableQued",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "capTableAddress",
         "type": "address"
       }
     ],
@@ -42,14 +80,9 @@
         "internalType": "address",
         "name": "adr",
         "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "uuid",
-        "type": "bytes32"
       }
     ],
-    "name": "add",
+    "name": "approve",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -73,6 +106,139 @@
         "internalType": "address",
         "name": "adr",
         "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "reason",
+        "type": "bytes32"
+      }
+    ],
+    "name": "decline",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getActiveCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "activeCapTables",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "uuid",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "capTableAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "uuid",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getLastQuedAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "capTableAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getList",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "capTableList",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getQuedCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "quedCapTables",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
+      }
+    ],
+    "name": "getStatus",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "status",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
+      }
+    ],
+    "name": "getUuid",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "uuid",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
       }
     ],
     "name": "info",
@@ -83,9 +249,9 @@
         "type": "bytes32"
       },
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "active",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -111,29 +277,21 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "list",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "address[]",
-        "name": "capTableList",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "adr",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "uuid",
+        "type": "bytes32"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "listActive",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "capTableList",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "que",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

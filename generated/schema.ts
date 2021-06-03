@@ -100,13 +100,65 @@ export class CapTable extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get registry(): string {
-    let value = this.get("registry");
+  get name(): string {
+    let value = this.get("name");
     return value.toString();
   }
 
-  set registry(value: string) {
-    this.set("registry", Value.fromString(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get partitions(): Array<string> | null {
+    let value = this.get("partitions");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set partitions(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("partitions");
+    } else {
+      this.set("partitions", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get status(): string {
+    let value = this.get("status");
+    return value.toString();
+  }
+
+  set status(value: string) {
+    this.set("status", Value.fromString(value));
+  }
+
+  get registry(): string | null {
+    let value = this.get("registry");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set registry(value: string | null) {
+    if (value === null) {
+      this.unset("registry");
+    } else {
+      this.set("registry", Value.fromString(value as string));
+    }
   }
 
   get totalSupply(): BigInt {
@@ -116,15 +168,6 @@ export class CapTable extends Entity {
 
   set totalSupply(value: BigInt) {
     this.set("totalSupply", Value.fromBigInt(value));
-  }
-
-  get active(): boolean {
-    let value = this.get("active");
-    return value.toBoolean();
-  }
-
-  set active(value: boolean) {
-    this.set("active", Value.fromBoolean(value));
   }
 
   get owner(): Bytes {
@@ -171,8 +214,8 @@ export class CapTable extends Entity {
     this.set("orgnr", Value.fromString(value));
   }
 
-  get tokenBalances(): Array<string> | null {
-    let value = this.get("tokenBalances");
+  get tokenHolders(): Array<string> | null {
+    let value = this.get("tokenHolders");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -180,16 +223,16 @@ export class CapTable extends Entity {
     }
   }
 
-  set tokenBalances(value: Array<string> | null) {
+  set tokenHolders(value: Array<string> | null) {
     if (value === null) {
-      this.unset("tokenBalances");
+      this.unset("tokenHolders");
     } else {
-      this.set("tokenBalances", Value.fromStringArray(value as Array<string>));
+      this.set("tokenHolders", Value.fromStringArray(value as Array<string>));
     }
   }
 }
 
-export class TokenBalance extends Entity {
+export class TokenHolder extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -197,17 +240,17 @@ export class TokenBalance extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save TokenBalance entity without an ID");
+    assert(id !== null, "Cannot save TokenHolder entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save TokenBalance entity with non-string ID. " +
+      "Cannot save TokenHolder entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("TokenBalance", id.toString(), this);
+    store.set("TokenHolder", id.toString(), this);
   }
 
-  static load(id: string): TokenBalance | null {
-    return store.get("TokenBalance", id) as TokenBalance | null;
+  static load(id: string): TokenHolder | null {
+    return store.get("TokenHolder", id) as TokenHolder | null;
   }
 
   get id(): string {
@@ -219,6 +262,23 @@ export class TokenBalance extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get capTable(): string | null {
+    let value = this.get("capTable");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set capTable(value: string | null) {
+    if (value === null) {
+      this.unset("capTable");
+    } else {
+      this.set("capTable", Value.fromString(value as string));
+    }
+  }
+
   get address(): Bytes {
     let value = this.get("address");
     return value.toBytes();
@@ -228,13 +288,61 @@ export class TokenBalance extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
-  get balance(): BigInt {
-    let value = this.get("balance");
+  get balances(): Array<string> | null {
+    let value = this.get("balances");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set balances(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("balances");
+    } else {
+      this.set("balances", Value.fromStringArray(value as Array<string>));
+    }
+  }
+}
+
+export class Balance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Balance entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Balance entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Balance", id.toString(), this);
+  }
+
+  static load(id: string): Balance | null {
+    return store.get("Balance", id) as Balance | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
     return value.toBigInt();
   }
 
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
   }
 
   get partition(): string {
@@ -244,5 +352,22 @@ export class TokenBalance extends Entity {
 
   set partition(value: string) {
     this.set("partition", Value.fromString(value));
+  }
+
+  get tokenHolder(): string | null {
+    let value = this.get("tokenHolder");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenHolder(value: string | null) {
+    if (value === null) {
+      this.unset("tokenHolder");
+    } else {
+      this.set("tokenHolder", Value.fromString(value as string));
+    }
   }
 }

@@ -6,23 +6,29 @@ dataSources:
     name: CapTableRegistry
     network: mainnet
     source:
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+      address: "0x851356ae760d987E095750cCeb3bC6014560891C"
       abi: CapTableRegistry
+      startBlock: 181600
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mapping.ts
+      file: ./src/capTableRegistry.ts
       entities:
         - CapTableRegistry
       abis:
         - name: CapTableRegistry
           file: ./abis/CapTableRegistry.json
       eventHandlers:
-        - event: capTableAdded(indexed address)
-          handler: handleCapTableAdded
+        - event: capTableQued(indexed address,indexed bytes32)
+          handler: handleCapTableQued
+        - event: capTableApproved(indexed address)
+          handler: handleCapTableApproved
         - event: capTableRemoved(indexed address)
           handler: handleCapTableRemoved
+        - event: capTableDeclined(indexed address,bytes32)
+          handler: handleCapTableDeclined
+
 templates:
   - name: CapTable
     kind: ethereum/contract
@@ -31,7 +37,7 @@ templates:
       abi: ERC1400
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.1
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/captable.ts
       entities:
@@ -45,6 +51,8 @@ templates:
           handler: handleTransferByPartition
         - event: IssuedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes,bytes)
           handler: handleIssuedByPartition
+        - event: RedeemedByPartition(indexed bytes32,indexed address,indexed address,uint256,bytes)
+          handler: handleRedeemByPartition
   # - Approval(indexed address,indexed address,uint256)
   # - ApprovalByPartition(indexed bytes32,indexed address,indexed address,uint256)
   # - AuthorizedOperator(indexed address,indexed address)

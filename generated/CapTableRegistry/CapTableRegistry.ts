@@ -10,21 +10,65 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class capTableAdded extends ethereum.Event {
-  get params(): capTableAdded__Params {
-    return new capTableAdded__Params(this);
+export class capTableApproved extends ethereum.Event {
+  get params(): capTableApproved__Params {
+    return new capTableApproved__Params(this);
   }
 }
 
-export class capTableAdded__Params {
-  _event: capTableAdded;
+export class capTableApproved__Params {
+  _event: capTableApproved;
 
-  constructor(event: capTableAdded) {
+  constructor(event: capTableApproved) {
     this._event = event;
   }
 
   get capTableAddress(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class capTableDeclined extends ethereum.Event {
+  get params(): capTableDeclined__Params {
+    return new capTableDeclined__Params(this);
+  }
+}
+
+export class capTableDeclined__Params {
+  _event: capTableDeclined;
+
+  constructor(event: capTableDeclined) {
+    this._event = event;
+  }
+
+  get capTableAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get reason(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+}
+
+export class capTableQued extends ethereum.Event {
+  get params(): capTableQued__Params {
+    return new capTableQued__Params(this);
+  }
+}
+
+export class capTableQued__Params {
+  _event: capTableQued;
+
+  constructor(event: capTableQued) {
+    this._event = event;
+  }
+
+  get capTableAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get uuid(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 }
 
@@ -41,16 +85,16 @@ export class capTableRemoved__Params {
     this._event = event;
   }
 
-  get capTableRemoved(): Address {
+  get capTableAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 }
 
 export class CapTableRegistry__infoResult {
   value0: Bytes;
-  value1: boolean;
+  value1: BigInt;
 
-  constructor(value0: Bytes, value1: boolean) {
+  constructor(value0: Bytes, value1: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
   }
@@ -58,7 +102,7 @@ export class CapTableRegistry__infoResult {
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromFixedBytes(this.value0));
-    map.set("value1", ethereum.Value.fromBoolean(this.value1));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     return map;
   }
 }
@@ -83,19 +127,148 @@ export class CapTableRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
+  getActiveCount(): BigInt {
+    let result = super.call("getActiveCount", "getActiveCount():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_getActiveCount(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getActiveCount",
+      "getActiveCount():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getAddress(uuid: Bytes): Address {
+    let result = super.call("getAddress", "getAddress(bytes32):(address)", [
+      ethereum.Value.fromFixedBytes(uuid)
+    ]);
+
+    return result[0].toAddress();
+  }
+
+  try_getAddress(uuid: Bytes): ethereum.CallResult<Address> {
+    let result = super.tryCall("getAddress", "getAddress(bytes32):(address)", [
+      ethereum.Value.fromFixedBytes(uuid)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getLastQuedAddress(uuid: Bytes): Address {
+    let result = super.call(
+      "getLastQuedAddress",
+      "getLastQuedAddress(bytes32):(address)",
+      [ethereum.Value.fromFixedBytes(uuid)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getLastQuedAddress(uuid: Bytes): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getLastQuedAddress",
+      "getLastQuedAddress(bytes32):(address)",
+      [ethereum.Value.fromFixedBytes(uuid)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getList(): Array<Address> {
+    let result = super.call("getList", "getList():(address[])", []);
+
+    return result[0].toAddressArray();
+  }
+
+  try_getList(): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall("getList", "getList():(address[])", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  getQuedCount(): BigInt {
+    let result = super.call("getQuedCount", "getQuedCount():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_getQuedCount(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getQuedCount", "getQuedCount():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getStatus(adr: Address): BigInt {
+    let result = super.call("getStatus", "getStatus(address):(uint256)", [
+      ethereum.Value.fromAddress(adr)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getStatus(adr: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getStatus", "getStatus(address):(uint256)", [
+      ethereum.Value.fromAddress(adr)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getUuid(adr: Address): Bytes {
+    let result = super.call("getUuid", "getUuid(address):(bytes32)", [
+      ethereum.Value.fromAddress(adr)
+    ]);
+
+    return result[0].toBytes();
+  }
+
+  try_getUuid(adr: Address): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("getUuid", "getUuid(address):(bytes32)", [
+      ethereum.Value.fromAddress(adr)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   info(adr: Address): CapTableRegistry__infoResult {
-    let result = super.call("info", "info(address):(bytes32,bool)", [
+    let result = super.call("info", "info(address):(bytes32,uint256)", [
       ethereum.Value.fromAddress(adr)
     ]);
 
     return new CapTableRegistry__infoResult(
       result[0].toBytes(),
-      result[1].toBoolean()
+      result[1].toBigInt()
     );
   }
 
   try_info(adr: Address): ethereum.CallResult<CapTableRegistry__infoResult> {
-    let result = super.tryCall("info", "info(address):(bytes32,bool)", [
+    let result = super.tryCall("info", "info(address):(bytes32,uint256)", [
       ethereum.Value.fromAddress(adr)
     ]);
     if (result.reverted) {
@@ -103,7 +276,7 @@ export class CapTableRegistry extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new CapTableRegistry__infoResult(value[0].toBytes(), value[1].toBoolean())
+      new CapTableRegistry__infoResult(value[0].toBytes(), value[1].toBigInt())
     );
   }
 
@@ -124,36 +297,6 @@ export class CapTableRegistry extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  list(): Array<Address> {
-    let result = super.call("list", "list():(address[])", []);
-
-    return result[0].toAddressArray();
-  }
-
-  try_list(): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall("list", "list():(address[])", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
-  }
-
-  listActive(): Array<Address> {
-    let result = super.call("listActive", "listActive():(address[])", []);
-
-    return result[0].toAddressArray();
-  }
-
-  try_listActive(): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall("listActive", "listActive():(address[])", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 }
 
@@ -187,20 +330,84 @@ export class ConstructorCall__Outputs {
   }
 }
 
-export class AddCall extends ethereum.Call {
-  get inputs(): AddCall__Inputs {
-    return new AddCall__Inputs(this);
+export class ApproveCall extends ethereum.Call {
+  get inputs(): ApproveCall__Inputs {
+    return new ApproveCall__Inputs(this);
   }
 
-  get outputs(): AddCall__Outputs {
-    return new AddCall__Outputs(this);
+  get outputs(): ApproveCall__Outputs {
+    return new ApproveCall__Outputs(this);
   }
 }
 
-export class AddCall__Inputs {
-  _call: AddCall;
+export class ApproveCall__Inputs {
+  _call: ApproveCall;
 
-  constructor(call: AddCall) {
+  constructor(call: ApproveCall) {
+    this._call = call;
+  }
+
+  get adr(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class ApproveCall__Outputs {
+  _call: ApproveCall;
+
+  constructor(call: ApproveCall) {
+    this._call = call;
+  }
+}
+
+export class DeclineCall extends ethereum.Call {
+  get inputs(): DeclineCall__Inputs {
+    return new DeclineCall__Inputs(this);
+  }
+
+  get outputs(): DeclineCall__Outputs {
+    return new DeclineCall__Outputs(this);
+  }
+}
+
+export class DeclineCall__Inputs {
+  _call: DeclineCall;
+
+  constructor(call: DeclineCall) {
+    this._call = call;
+  }
+
+  get adr(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get reason(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+}
+
+export class DeclineCall__Outputs {
+  _call: DeclineCall;
+
+  constructor(call: DeclineCall) {
+    this._call = call;
+  }
+}
+
+export class QueCall extends ethereum.Call {
+  get inputs(): QueCall__Inputs {
+    return new QueCall__Inputs(this);
+  }
+
+  get outputs(): QueCall__Outputs {
+    return new QueCall__Outputs(this);
+  }
+}
+
+export class QueCall__Inputs {
+  _call: QueCall;
+
+  constructor(call: QueCall) {
     this._call = call;
   }
 
@@ -213,10 +420,10 @@ export class AddCall__Inputs {
   }
 }
 
-export class AddCall__Outputs {
-  _call: AddCall;
+export class QueCall__Outputs {
+  _call: QueCall;
 
-  constructor(call: AddCall) {
+  constructor(call: QueCall) {
     this._call = call;
   }
 }

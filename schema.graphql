@@ -5,21 +5,52 @@ type CapTableRegistry @entity {
   address: Bytes!
 }
 
+enum CapTableRegistryStatus {
+  UNKNOWN
+  QUED
+  APPROVED
+  DECLINED
+  REMOVED
+}
+
+# type _Schema_
+#   @fulltext(
+#     name: "capTableSearch"
+#     language: no
+#     algorithm: rank
+#     include: [
+#       {
+#         entity: "CapTable"
+#         fields: [{ name: "name" }, { name: "symbol" }, { name: "orgnr" }]
+#       }
+#     ]
+#   )
+
 type CapTable @entity {
   id: ID!
-  registry: CapTableRegistry!
+  name: String!
+  symbol: String!
+  partitions: [String!]
+  status: CapTableRegistryStatus!
+  registry: CapTableRegistry
   totalSupply: BigInt!
-  active: Boolean
   owner: Bytes!
   minter: Bytes!
   controllers: [Bytes!]
   orgnr: String!
-  tokenBalances: [TokenBalance!]
+  tokenHolders: [TokenHolder!] @derivedFrom(field: "capTable")
 }
 
-type TokenBalance @entity {
+type TokenHolder @entity {
   id: ID!
+  capTable: CapTable
   address: Bytes!
-  balance: BigInt!
+  balances: [Balance!] @derivedFrom(field: "tokenHolder")
+}
+
+type Balance @entity {
+  id: ID!
+  amount: BigInt!
   partition: String!
+  tokenHolder: TokenHolder
 }

@@ -1,0 +1,8 @@
+{
+    "mochaExplorer.files" : "test/**/*.{j,t}s",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#3d973d",
+        "titleBar.activeBackground": "#3d973d",
+        "titleBar.activeForeground": "#f3f3f3"
+    }
+}

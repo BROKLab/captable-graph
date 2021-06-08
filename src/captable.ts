@@ -16,9 +16,9 @@ let capTableRegistryId = context.getString("capTableRegistryId");
 let capTableUuid = context.getString("capTableUuid");
 
 export function handleIssuedByPartition(event: IssuedByPartition): void {
-  let capTable = CapTableSchema.load(event.address.toBase58());
+  let capTable = CapTableSchema.load(event.address.toHexString());
   if (capTable == null) {
-    capTable = new CapTableSchema(event.address.toBase58());
+    capTable = new CapTableSchema(event.address.toHexString());
   }
   let contract = ERC1400.bind(event.address);
   let owner = contract.owner();
@@ -27,6 +27,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
   for (let i = 0; i < partitionsBytes.length; i++) {
     partitions.push(partitionsBytes[i].toString());
   }
+
   capTable.name = contract.name().toString();
   capTable.partitions = partitions;
   capTable.symbol = contract.symbol().toString();
@@ -43,19 +44,20 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
   capTable.save();
   // Token holder
   let tokenHolder = new TokenHolder(
-    event.address.toBase58() + "-" + event.params.to.toBase58()
+    event.address.toHexString() + "-" + event.params.to.toHexString()
   );
   tokenHolder.address = event.params.to;
   tokenHolder.capTable = capTable.id;
   tokenHolder.save();
   //Balance
   let balance = new Balance(
-    event.address.toBase58() +
+    event.address.toHexString() +
       "-" +
-      event.params.to.toBase58() +
+      event.params.to.toHexString() +
       "-" +
       event.params.partition.toString()
   );
+  balance.capTable = capTable.id;
   balance.partition = event.params.partition.toString();
   balance.amount = event.params.value;
   balance.tokenHolder = tokenHolder.id;
@@ -65,9 +67,9 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
 export function handleTransferByPartition(event: TransferByPartition): void {
   // fromTokenHolder balance adjustment
   let fromBalance = Balance.load(
-    event.address.toBase58() +
+    event.address.toHexString() +
       "-" +
-      event.params.from.toBase58() +
+      event.params.from.toHexString() +
       "-" +
       event.params.fromPartition.toString()
   );
@@ -81,9 +83,9 @@ export function handleTransferByPartition(event: TransferByPartition): void {
 
   // toTokenHolder balance adjustment
   let toBalance = Balance.load(
-    event.address.toBase58() +
+    event.address.toHexString() +
       "-" +
-      event.params.to.toBase58() +
+      event.params.to.toHexString() +
       "-" +
       event.params.fromPartition.toString()
   );
@@ -93,26 +95,27 @@ export function handleTransferByPartition(event: TransferByPartition): void {
   } else {
     // if toBalance was not adjusted, it does not exist and we need to create it.
     let toTokenHolder = TokenHolder.load(
-      event.address.toBase58() + "-" + event.params.to.toBase58()
+      event.address.toHexString() + "-" + event.params.to.toHexString()
     );
     if (toTokenHolder == null) {
       toTokenHolder = new TokenHolder(
-        event.address.toBase58() + "-" + event.params.to.toBase58()
+        event.address.toHexString() + "-" + event.params.to.toHexString()
       );
       toTokenHolder.address = event.params.to;
-      toTokenHolder.capTable = event.address.toBase58();
+      toTokenHolder.capTable = event.address.toHexString();
       toTokenHolder.save();
     }
     let toBalance = new Balance(
-      event.address.toBase58() +
+      event.address.toHexString() +
         "-" +
-        event.params.to.toBase58() +
+        event.params.to.toHexString() +
         "-" +
         event.params.fromPartition.toString()
     );
     toBalance.partition = event.params.fromPartition.toString();
     toBalance.amount = event.params.value;
     toBalance.tokenHolder = toTokenHolder.id;
+    toBalance.capTable = event.address.toHexString();
     toBalance.save();
   }
 }
@@ -120,9 +123,9 @@ export function handleTransferByPartition(event: TransferByPartition): void {
 export function handleRedeemByPartition(event: RedeemedByPartition): void {
   // fromTokenHolder balance adjustment
   let fromBalance = Balance.load(
-    event.address.toBase58() +
+    event.address.toHexString() +
       "-" +
-      event.params.from.toBase58() +
+      event.params.from.toHexString() +
       "-" +
       event.params.partition.toString()
   );

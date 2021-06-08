@@ -370,4 +370,21 @@ export class Balance extends Entity {
       this.set("tokenHolder", Value.fromString(value as string));
     }
   }
+
+  get capTable(): string | null {
+    let value = this.get("capTable");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set capTable(value: string | null) {
+    if (value === null) {
+      this.unset("capTable");
+    } else {
+      this.set("capTable", Value.fromString(value as string));
+    }
+  }
 }

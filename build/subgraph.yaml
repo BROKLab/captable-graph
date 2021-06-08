@@ -6,7 +6,7 @@ dataSources:
     name: CapTableRegistry
     network: mainnet
     source:
-      address: "0x851356ae760d987E095750cCeb3bC6014560891C"
+      address: "0xAB94ABefdbaFb14b1dBf72EF940711d11067f5d4"
       abi: CapTableRegistry
       startBlock: 181600
     mapping:

@@ -241,30 +241,6 @@
         "type": "address"
       }
     ],
-    "name": "info",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "uuid",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "active",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "adr",
-        "type": "address"
-      }
-    ],
     "name": "isController",
     "outputs": [
       {

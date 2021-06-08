@@ -16,7 +16,7 @@ enum CapTableRegistryStatus {
 # type _Schema_
 #   @fulltext(
 #     name: "capTableSearch"
-#     language: no
+#     language: en
 #     algorithm: rank
 #     include: [
 #       {
@@ -53,4 +53,5 @@ type Balance @entity {
   amount: BigInt!
   partition: String!
   tokenHolder: TokenHolder
+  capTable: CapTable
 }

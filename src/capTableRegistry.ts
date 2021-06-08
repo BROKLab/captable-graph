@@ -3,8 +3,13 @@ import {
   CapTableRegistry,
   capTableQued,
   capTableRemoved,
+  capTableDeclined,
+  capTableApproved,
 } from "../generated/CapTableRegistry/CapTableRegistry";
-import { CapTableRegistry as CapTableRegistrySchema } from "../generated/schema";
+import {
+  CapTableRegistry as CapTableRegistrySchema,
+  CapTable as CapTableSchema,
+} from "../generated/schema";
 import { CapTable } from "../generated/templates";
 
 export function handleCapTableQued(event: capTableQued): void {
@@ -31,8 +36,49 @@ export function handleCapTableQued(event: capTableQued): void {
   // Start indexing the new capTable
   let context = new DataSourceContext();
   context.setString("capTableRegistryId", capTableRegistry.id);
-  context.setString("capTableUuid", event.params.uuid.toString());
+  context.setString("capTableUuid", "qued_" + event.params.uuid.toString());
   CapTable.createWithContext(event.params.capTableAddress, context);
 }
 
-export function handlecapTableRemoved(event: capTableRemoved): void {}
+export function handleCapTableApproved(event: capTableApproved): void {
+  let capTable = CapTableSchema.load(
+    event.params.capTableAddress.toHexString()
+  );
+  if (capTable == null) {
+    log.critical("LOGICAL SMART CONTRACT ERROR {}", [
+      "capTable in handleCapTableApproved should always exist.",
+    ]);
+  }
+  let seperatorIndex = capTable.orgnr.indexOf("_");
+  capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
+  capTable.status = "APPROVED";
+  capTable.save();
+}
+export function handlecapTableRemoved(event: capTableRemoved): void {
+  let capTable = CapTableSchema.load(
+    event.params.capTableAddress.toHexString()
+  );
+  if (capTable == null) {
+    log.critical("LOGICAL SMART CONTRACT ERROR {}", [
+      "capTable in handleCapTableApproved should always exist.",
+    ]);
+  }
+  capTable.orgnr = "REMOVED_" + capTable.orgnr;
+  capTable.status = "REMOVED";
+  capTable.save();
+}
+export function handleCapTableDeclined(event: capTableDeclined): void {
+  let capTable = CapTableSchema.load(
+    event.params.capTableAddress.toHexString()
+  );
+  if (capTable == null) {
+    log.critical("LOGICAL SMART CONTRACT ERROR {}", [
+      "capTable in handleCapTableApproved should always exist.",
+    ]);
+  }
+  let seperatorIndex = capTable.orgnr.indexOf("_");
+  capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
+  capTable.orgnr = "DECLINED_" + capTable.orgnr;
+  capTable.status = "DECLINED";
+  capTable.save();
+}

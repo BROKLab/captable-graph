@@ -90,23 +90,6 @@ export class capTableRemoved__Params {
   }
 }
 
-export class CapTableRegistry__infoResult {
-  value0: Bytes;
-  value1: BigInt;
-
-  constructor(value0: Bytes, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromFixedBytes(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-}
-
 export class CapTableRegistry extends ethereum.SmartContract {
   static bind(address: Address): CapTableRegistry {
     return new CapTableRegistry("CapTableRegistry", address);
@@ -254,30 +237,6 @@ export class CapTableRegistry extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  info(adr: Address): CapTableRegistry__infoResult {
-    let result = super.call("info", "info(address):(bytes32,uint256)", [
-      ethereum.Value.fromAddress(adr)
-    ]);
-
-    return new CapTableRegistry__infoResult(
-      result[0].toBytes(),
-      result[1].toBigInt()
-    );
-  }
-
-  try_info(adr: Address): ethereum.CallResult<CapTableRegistry__infoResult> {
-    let result = super.tryCall("info", "info(address):(bytes32,uint256)", [
-      ethereum.Value.fromAddress(adr)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new CapTableRegistry__infoResult(value[0].toBytes(), value[1].toBigInt())
-    );
   }
 
   isController(adr: Address): boolean {

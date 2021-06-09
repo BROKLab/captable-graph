@@ -49,7 +49,7 @@ export function handleCapTableApproved(event: capTableApproved): void {
       "capTable in handleCapTableApproved should always exist.",
     ]);
   }
-  let seperatorIndex = capTable.orgnr.indexOf("_");
+  let seperatorIndex = capTable.orgnr.indexOf("_") + 1;
   capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
   capTable.status = "APPROVED";
   capTable.save();

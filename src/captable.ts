@@ -19,48 +19,68 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
   let capTable = CapTableSchema.load(event.address.toHexString());
   if (capTable == null) {
     capTable = new CapTableSchema(event.address.toHexString());
-  }
-  let contract = ERC1400.bind(event.address);
-  let owner = contract.owner();
-  let partitionsBytes = contract.totalPartitions();
-  let partitions: Array<String> = [];
-  for (let i = 0; i < partitionsBytes.length; i++) {
-    partitions.push(partitionsBytes[i].toString());
+    let contract = ERC1400.bind(event.address);
+    let owner = contract.owner();
+    let partitionsBytes = contract.totalPartitions();
+    let partitions: Array<String> = [];
+    for (let i = 0; i < partitionsBytes.length; i++) {
+      partitions.push(partitionsBytes[i].toString());
+    }
+
+    capTable.name = contract.name().toString();
+    capTable.partitions = partitions;
+    capTable.symbol = contract.symbol().toString();
+    capTable.orgnr = capTableUuid.toString();
+    capTable.minter = owner;
+    capTable.status = "QUED";
+    capTable.registry = capTableRegistryId;
+    capTable.owner = owner;
+    capTable.totalSupply = contract.totalSupply();
+    let controllers = contract.controllers() as Array<Bytes>;
+    if (controllers) {
+      capTable.controllers = controllers;
+    }
+    capTable.save();
   }
 
-  capTable.name = contract.name().toString();
-  capTable.partitions = partitions;
-  capTable.symbol = contract.symbol().toString();
-  capTable.orgnr = capTableUuid.toString();
-  capTable.minter = owner;
-  capTable.status = "QUED";
-  capTable.registry = capTableRegistryId;
-  capTable.owner = owner;
-  capTable.totalSupply = contract.totalSupply();
-  let controllers = contract.controllers() as Array<Bytes>;
-  if (controllers) {
-    capTable.controllers = controllers;
-  }
-  capTable.save();
   // Token holder
-  let tokenHolder = new TokenHolder(
+
+  let tokenHolder = TokenHolder.load(
     event.address.toHexString() + "-" + event.params.to.toHexString()
   );
-  tokenHolder.address = event.params.to;
-  tokenHolder.capTable = capTable.id;
-  tokenHolder.save();
+  if (tokenHolder == null) {
+    tokenHolder = new TokenHolder(
+      event.address.toHexString() + "-" + event.params.to.toHexString()
+    );
+    tokenHolder.address = event.params.to;
+    tokenHolder.capTable = capTable.id;
+    tokenHolder.save();
+  }
+
   //Balance
-  let balance = new Balance(
+  let balance = Balance.load(
     event.address.toHexString() +
       "-" +
       event.params.to.toHexString() +
       "-" +
       event.params.partition.toString()
   );
-  balance.capTable = capTable.id;
-  balance.partition = event.params.partition.toString();
-  balance.amount = event.params.value;
-  balance.tokenHolder = tokenHolder.id;
+  if (balance == null) {
+    balance = new Balance(
+      event.address.toHexString() +
+        "-" +
+        event.params.to.toHexString() +
+        "-" +
+        event.params.partition.toString()
+    );
+    balance.capTable = capTable.id;
+    balance.partition = event.params.partition.toString();
+    balance.tokenHolder = tokenHolder.id;
+    balance.amount = event.params.value;
+  } else {
+    balance.amount = event.params.value.plus(balance.amount);
+  }
+
   balance.save();
 }
 

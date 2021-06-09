@@ -9,15 +9,15 @@
     "remove-local": "graph remove --node http://localhost:8020/ brok/captable",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 brok/captable",
     "create:brokTest": "graph create --node http://51.13.101.128:8020/ brok/captable",
-    "deploy:brokTest": "yarn prepare:stage && graph deploy --node http://51.13.101.128:8020/ --ipfs http://51.13.101.128:5001 brok/captable",
+    "deploy:brokTest": "yarn prepare:test && graph deploy --node http://51.13.101.128:8020/ --ipfs http://51.13.101.128:5001 brok/captable",
     "remove:brokTest": "graph remove --node http://51.13.101.128:8020/ brok/captable",
     "reset:brokTest": "yarn remove:brokTest && yarn create:brokTest && yarn deploy:brokTest",
-    "prepare:test": "mustache config/brokTest.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:stage": "mustache config/brokStage.json subgraph.template.yaml > subgraph.yaml",
     "create:brokStage": "graph create --node http://51.120.95.118:8020/ brok/captable",
     "deploy:brokStage": "yarn prepare:stage && graph deploy --node http://51.120.95.118:8020/ --ipfs http://51.120.95.118:5001 brok/captable",
     "remove:brokStage": "graph remove --node http://51.120.95.118:8020/ brok/captable",
-    "reset:brokStage": "yarn remove:brokStage && yarn create:brokStage && yarn deploy:brokStage"
+    "reset:brokStage": "yarn remove:brokStage && yarn create:brokStage && yarn deploy:brokStage",
+    "prepare:test": "mustache config/brokTest.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:stage": "mustache config/brokStage.json subgraph.template.yaml > subgraph.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.20.0",

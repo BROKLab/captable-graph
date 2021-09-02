@@ -30,8 +30,8 @@ export function handleCapTableQued(event: capTableQued): void {
   capTableRegistry.count = capTableRegistry.count + BigInt.fromI32(1);
   capTableRegistry.save();
 
-  let capTableQueContract = CapTableRegistry.bind(event.address);
-  let uuid = capTableQueContract.getUuid(event.address);
+  // let capTableQueContract = CapTableRegistry.bind(event.address);
+  // let uuid = capTableQueContract.getUuid(event.address);
 
   // Start indexing the new capTable
   let context = new DataSourceContext();

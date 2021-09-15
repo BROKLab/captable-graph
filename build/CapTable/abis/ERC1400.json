@@ -1,21 +1,501 @@
 [
   {
-    "constant": false,
     "inputs": [
       {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "granularity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "controllers",
+        "type": "address[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "defaultPartitions",
+        "type": "bytes32[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "ApprovalByPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "AuthorizedOperator",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "AuthorizedOperatorByPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "fromPartition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "toPartition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "ChangedPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
         "name": "name",
         "type": "bytes32"
       },
       {
+        "indexed": false,
+        "internalType": "string",
         "name": "uri",
         "type": "string"
       },
       {
+        "indexed": false,
+        "internalType": "bytes32",
         "name": "documentHash",
         "type": "bytes32"
       }
     ],
-    "name": "setDocument",
+    "name": "Document",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "Issued",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "operatorData",
+        "type": "bytes"
+      }
+    ],
+    "name": "IssuedByPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "MinterAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "MinterRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "Redeemed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "operatorData",
+        "type": "bytes"
+      }
+    ],
+    "name": "RedeemedByPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "RevokedOperator",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "RevokedOperatorByPartition",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "fromPartition",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "operatorData",
+        "type": "bytes"
+      }
+    ],
+    "name": "TransferByPartition",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "addMinter",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -23,12 +503,55 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "name",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      }
+    ],
+    "name": "allowance",
     "outputs": [
       {
+        "internalType": "uint256",
         "name": "",
-        "type": "string"
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      }
+    ],
+    "name": "allowanceByPartition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -39,10 +562,12 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "spender",
         "type": "address"
       },
       {
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       }
@@ -50,6 +575,7 @@
     "name": "approve",
     "outputs": [
       {
+        "internalType": "bool",
         "name": "",
         "type": "bool"
       }
@@ -62,10 +588,58 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "bytes32",
         "name": "partition",
         "type": "bytes32"
       },
       {
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "approveByPartition",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
+    ],
+    "name": "authorizeOperator",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
         "name": "operator",
         "type": "address"
       }
@@ -77,376 +651,10 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "approveByPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "revokeOperatorByPartition",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "operators",
-        "type": "address[]"
-      }
-    ],
-    "name": "setPartitionControllers",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [
       {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "name": "spender",
-        "type": "address"
-      }
-    ],
-    "name": "allowanceByPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalSupply",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFrom",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "interfaceHash",
-        "type": "bytes32"
-      },
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "canImplementInterfaceForAddress",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "transferWithData",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "isIssuable",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "removeMinter",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "balanceOfByPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "decimals",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "isControllable",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "granularity",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "redeemByPartition",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "tokenHolder",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "issueByPartition",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "totalPartitions",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "renounceIssuance",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "isOperatorForPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
+        "internalType": "address",
         "name": "tokenHolder",
         "type": "address"
       }
@@ -454,6 +662,7 @@
     "name": "balanceOf",
     "outputs": [
       {
+        "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
@@ -463,27 +672,51 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "balanceOfByPartition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
     "inputs": [
       {
-        "name": "tokenHolder",
+        "internalType": "bytes32",
+        "name": "interfaceHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "partitionsOf",
+    "name": "canImplementInterfaceForAddress",
     "outputs": [
       {
+        "internalType": "bytes32",
         "name": "",
-        "type": "bytes32[]"
+        "type": "bytes32"
       }
     ],
     "payable": false,
@@ -496,6 +729,7 @@
     "name": "controllers",
     "outputs": [
       {
+        "internalType": "address[]",
         "name": "",
         "type": "address[]"
       }
@@ -508,6 +742,7 @@
     "constant": true,
     "inputs": [
       {
+        "internalType": "bytes32",
         "name": "partition",
         "type": "bytes32"
       }
@@ -515,8 +750,203 @@
     "name": "controllersByPartition",
     "outputs": [
       {
+        "internalType": "address[]",
         "name": "",
         "type": "address[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getDefaultPartitions",
+    "outputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "",
+        "type": "bytes32[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getDocument",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "granularity",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isControllable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isIssuable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "isMinter",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "isOperator",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "isOperatorForPartition",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -527,26 +957,152 @@
     "constant": false,
     "inputs": [
       {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "from",
+        "internalType": "address",
+        "name": "tokenHolder",
         "type": "address"
       },
       {
-        "name": "to",
-        "type": "address"
-      },
-      {
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       },
       {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "issue",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "issueByPartition",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newContractAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "definitive",
+        "type": "bool"
+      }
+    ],
+    "name": "migrate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "operatorData",
+        "type": "bytes"
+      }
+    ],
+    "name": "operatorRedeemByPartition",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
         "name": "data",
         "type": "bytes"
       },
       {
+        "internalType": "bytes",
         "name": "operatorData",
         "type": "bytes"
       }
@@ -554,6 +1110,7 @@
     "name": "operatorTransferByPartition",
     "outputs": [
       {
+        "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
       }
@@ -568,6 +1125,7 @@
     "name": "owner",
     "outputs": [
       {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -578,12 +1136,19 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "isOwner",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenHolder",
+        "type": "address"
+      }
+    ],
+    "name": "partitionsOf",
     "outputs": [
       {
+        "internalType": "bytes32[]",
         "name": "",
-        "type": "bool"
+        "type": "bytes32[]"
       }
     ],
     "payable": false,
@@ -594,60 +1159,62 @@
     "constant": false,
     "inputs": [
       {
-        "name": "newContractAddress",
-        "type": "address"
-      },
-      {
-        "name": "definitive",
-        "type": "bool"
-      }
-    ],
-    "name": "migrate",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "authorizeOperator",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address"
-      },
-      {
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       },
       {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "redeem",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "redeemByPartition",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
         "name": "data",
         "type": "bytes"
       }
@@ -662,11 +1229,30 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "account",
         "type": "address"
       }
     ],
-    "name": "addMinter",
+    "name": "removeMinter",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceControl",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceIssuance",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -683,74 +1269,8 @@
   },
   {
     "constant": false,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "name": "tokenHolder",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "operatorData",
-        "type": "bytes"
-      }
-    ],
-    "name": "operatorRedeemByPartition",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "partition",
-        "type": "bytes32"
-      }
-    ],
-    "name": "totalSupplyByPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "extension",
-        "type": "address"
-      },
-      {
-        "name": "interfaceLabel",
-        "type": "string"
-      },
-      {
-        "name": "removeOldExtensionRoles",
-        "type": "bool"
-      },
-      {
-        "name": "addMinterRoleForExtension",
-        "type": "bool"
-      },
-      {
-        "name": "addControllerRoleForExtension",
-        "type": "bool"
-      }
-    ],
-    "name": "setTokenExtension",
+    "inputs": [],
+    "name": "renounceOwnership",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -760,171 +1280,12 @@
     "constant": false,
     "inputs": [
       {
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isMinter",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "name",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getDocument",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      },
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
+        "internalType": "address",
         "name": "operator",
         "type": "address"
-      },
-      {
-        "name": "tokenHolder",
-        "type": "address"
       }
     ],
-    "name": "isOperator",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "tokenHolder",
-        "type": "address"
-      },
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "issue",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getDefaultPartitions",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "renounceControl",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "name": "spender",
-        "type": "address"
-      }
-    ],
-    "name": "allowance",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "redeem",
+    "name": "revokeOperator",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -934,6 +1295,27 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
+    ],
+    "name": "revokeOperatorByPartition",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address[]",
         "name": "operators",
         "type": "address[]"
       }
@@ -948,6 +1330,7 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "bytes32[]",
         "name": "partitions",
         "type": "bytes32[]"
       }
@@ -962,18 +1345,261 @@
     "constant": false,
     "inputs": [
       {
-        "name": "from",
+        "internalType": "bytes32",
+        "name": "name",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "documentHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setDocument",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address[]",
+        "name": "operators",
+        "type": "address[]"
+      }
+    ],
+    "name": "setPartitionControllers",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "extension",
         "type": "address"
       },
       {
+        "internalType": "string",
+        "name": "interfaceLabel",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "removeOldExtensionRoles",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "addMinterRoleForExtension",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "addControllerRoleForExtension",
+        "type": "bool"
+      }
+    ],
+    "name": "setTokenExtension",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "totalPartitions",
+    "outputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "",
+        "type": "bytes32[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      }
+    ],
+    "name": "totalSupplyByPartition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "to",
         "type": "address"
       },
       {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "transfer",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "partition",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       },
       {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "transferByPartition",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "transferFrom",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
         "name": "data",
         "type": "bytes"
       }
@@ -988,6 +1614,7 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -1002,471 +1629,25 @@
     "constant": false,
     "inputs": [
       {
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
+        "internalType": "address",
         "name": "to",
         "type": "address"
       },
       {
+        "internalType": "uint256",
         "name": "value",
         "type": "uint256"
       },
       {
+        "internalType": "bytes",
         "name": "data",
         "type": "bytes"
       }
     ],
-    "name": "transferByPartition",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "revokeOperator",
+    "name": "transferWithData",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "name": "symbol",
-        "type": "string"
-      },
-      {
-        "name": "granularity",
-        "type": "uint256"
-      },
-      {
-        "name": "controllers",
-        "type": "address[]"
-      },
-      {
-        "name": "defaultPartitions",
-        "type": "bytes32[]"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ApprovalByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "MinterAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "MinterRemoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "name",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "uri",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "documentHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "Document",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "fromPartition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "data",
-        "type": "bytes"
-      },
-      {
-        "indexed": false,
-        "name": "operatorData",
-        "type": "bytes"
-      }
-    ],
-    "name": "TransferByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "fromPartition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "toPartition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ChangedPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "AuthorizedOperator",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "RevokedOperator",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "AuthorizedOperatorByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "tokenHolder",
-        "type": "address"
-      }
-    ],
-    "name": "RevokedOperatorByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "Issued",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "Redeemed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "data",
-        "type": "bytes"
-      },
-      {
-        "indexed": false,
-        "name": "operatorData",
-        "type": "bytes"
-      }
-    ],
-    "name": "IssuedByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "partition",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "operatorData",
-        "type": "bytes"
-      }
-    ],
-    "name": "RedeemedByPartition",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "Transfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "Approval",
-    "type": "event"
   }
 ]

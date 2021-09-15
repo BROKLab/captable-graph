@@ -54,7 +54,7 @@
       {
         "indexed": true,
         "internalType": "bytes32",
-        "name": "uuid",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -135,7 +135,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "uuid",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -154,7 +154,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "uuid",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -222,11 +222,11 @@
         "type": "address"
       }
     ],
-    "name": "getUuid",
+    "name": "getid",
     "outputs": [
       {
         "internalType": "bytes32",
-        "name": "uuid",
+        "name": "id",
         "type": "bytes32"
       }
     ],
@@ -261,7 +261,7 @@
       },
       {
         "internalType": "bytes32",
-        "name": "uuid",
+        "name": "id",
         "type": "bytes32"
       }
     ],

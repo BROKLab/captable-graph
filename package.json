@@ -8,15 +8,9 @@
     "local:create": "graph create --node http://localhost:8020/ brok/captable",
     "local:remove": "graph remove --node http://localhost:8020/ brok/captable",
     "local:deploy": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 brok/captable",
-    "brokTest:deploy": "graph deploy --product hosted-service broklab/captable1",
-    "brokTest:create": "graph create --node http://51.13.101.128:8020/ brok/captable",
-    "brokTest:remove": "graph remove --node http://51.13.101.128:8020/ brok/captable",
-    "brokTest:reset": "yarn brokTest:remove && yarn brokTest:create && yarn brokTest:deploy",
+    "brokTest:deploy": "yarn brokTest:prepare && graph deploy --product hosted-service broklab/captable_test_02",
     "brokTest:prepare": "mustache config/brokTest.json subgraph.template.yaml > subgraph.yaml",
-    "brokStage:deploy": "yarn prepare:stage && graph deploy --node http://51.120.95.118:8020/ --ipfs http://51.120.95.118:5001 brok/captable",
-    "brokStage:create": "graph create --node http://51.120.95.118:8020/ brok/captable",
-    "brokStage:remove": "graph remove --node http://51.120.95.118:8020/ brok/captable",
-    "brokStage:reset": "yarn brokStage:remove && yarn brokStage:create && yarn brokStage:deploy",
+    "brokStage:deploy": "yarn brokStage:prepare && graph deploy --product hosted-service  broklab/captable_stage_02",
     "brokStage:prepare": "mustache config/brokStage.json subgraph.template.yaml > subgraph.yaml"
   },
   "dependencies": {

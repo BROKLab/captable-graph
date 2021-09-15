@@ -67,7 +67,7 @@ export class capTableQued__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get uuid(): Bytes {
+  get id(): Bytes {
     return this._event.parameters[1].value.toBytes();
   }
 }
@@ -129,17 +129,17 @@ export class CapTableRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getAddress(uuid: Bytes): Address {
+  getAddress(id: Bytes): Address {
     let result = super.call("getAddress", "getAddress(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(uuid)
+      ethereum.Value.fromFixedBytes(id)
     ]);
 
     return result[0].toAddress();
   }
 
-  try_getAddress(uuid: Bytes): ethereum.CallResult<Address> {
+  try_getAddress(id: Bytes): ethereum.CallResult<Address> {
     let result = super.tryCall("getAddress", "getAddress(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(uuid)
+      ethereum.Value.fromFixedBytes(id)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -148,21 +148,21 @@ export class CapTableRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getLastQuedAddress(uuid: Bytes): Address {
+  getLastQuedAddress(id: Bytes): Address {
     let result = super.call(
       "getLastQuedAddress",
       "getLastQuedAddress(bytes32):(address)",
-      [ethereum.Value.fromFixedBytes(uuid)]
+      [ethereum.Value.fromFixedBytes(id)]
     );
 
     return result[0].toAddress();
   }
 
-  try_getLastQuedAddress(uuid: Bytes): ethereum.CallResult<Address> {
+  try_getLastQuedAddress(id: Bytes): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "getLastQuedAddress",
       "getLastQuedAddress(bytes32):(address)",
-      [ethereum.Value.fromFixedBytes(uuid)]
+      [ethereum.Value.fromFixedBytes(id)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -220,16 +220,16 @@ export class CapTableRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getUuid(adr: Address): Bytes {
-    let result = super.call("getUuid", "getUuid(address):(bytes32)", [
+  getid(adr: Address): Bytes {
+    let result = super.call("getid", "getid(address):(bytes32)", [
       ethereum.Value.fromAddress(adr)
     ]);
 
     return result[0].toBytes();
   }
 
-  try_getUuid(adr: Address): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("getUuid", "getUuid(address):(bytes32)", [
+  try_getid(adr: Address): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("getid", "getid(address):(bytes32)", [
       ethereum.Value.fromAddress(adr)
     ]);
     if (result.reverted) {
@@ -374,7 +374,7 @@ export class QueCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get uuid(): Bytes {
+  get id(): Bytes {
     return this._call.inputValues[1].value.toBytes();
   }
 }

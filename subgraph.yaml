@@ -8,9 +8,9 @@ dataSources:
     name: CapTableRegistry
     network: arbitrum-rinkeby
     source:
-      address: "0x298988aE690A419Ada6918798A9f30B7f5d2Af6C"
+      address: "0x42a7E57C4499b4C0A9A33d84673977F0Cfb8e7C1"
       abi: CapTableRegistry
-      startBlock: 1816000
+      startBlock: 4400000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

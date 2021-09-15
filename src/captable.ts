@@ -13,7 +13,7 @@ import {
 
 let context = dataSource.context();
 let capTableRegistryId = context.getString("capTableRegistryId");
-let capTableUuid = context.getString("capTableUuid");
+let capTableId = context.getString("capTableId");
 
 export function handleIssuedByPartition(event: IssuedByPartition): void {
   let capTable = CapTableSchema.load(event.address.toHexString());
@@ -30,7 +30,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable.name = contract.name().toString();
     capTable.partitions = partitions;
     capTable.symbol = contract.symbol().toString();
-    capTable.orgnr = capTableUuid.toString();
+    capTable.orgnr = capTableId.toString();
     capTable.minter = owner;
     capTable.status = "QUED";
     capTable.registry = capTableRegistryId;

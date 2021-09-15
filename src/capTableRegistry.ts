@@ -36,7 +36,7 @@ export function handleCapTableQued(event: capTableQued): void {
   // Start indexing the new capTable
   let context = new DataSourceContext();
   context.setString("capTableRegistryId", capTableRegistry.id);
-  context.setString("capTableUuid", "qued_" + event.params.uuid.toString());
+  context.setString("capTableId", "qued_" + event.params.id.toString());
   CapTable.createWithContext(event.params.capTableAddress, context);
 }
 

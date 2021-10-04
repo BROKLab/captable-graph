@@ -55,3 +55,24 @@ type Balance @entity {
   tokenHolder: TokenHolder
   capTable: CapTable
 }
+
+type Vault @entity {
+  id: ID!
+  capTable: CapTable!
+  status: Int
+  cTokenAddress: Bytes!
+  cTokenTotalSupply: Bytes!
+  cTokenHolders: [ERC20TokenHolder!] @derivedFrom(field: "cTokenVault")
+  pTokenAddress: Bytes!
+  pTokenTotalSupply: Bytes!
+  pTokenHolders: [ERC20TokenHolder!] @derivedFrom(field: "pTokenVault")
+  tokenHolder: TokenHolder
+  capTable: CapTable
+}
+
+type ERC20TokenHolder @entity {
+  id: ID!
+  amount: BigInt!
+  cTokenVault: Vault
+  pTokenVault: Vault
+}

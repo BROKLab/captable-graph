@@ -388,3 +388,230 @@ export class Balance extends Entity {
     }
   }
 }
+
+export class Vault extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Vault entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Vault entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Vault", id.toString(), this);
+  }
+
+  static load(id: string): Vault | null {
+    return store.get("Vault", id) as Vault | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get capTable(): string {
+    let value = this.get("capTable");
+    return value.toString();
+  }
+
+  set capTable(value: string) {
+    this.set("capTable", Value.fromString(value));
+  }
+
+  get status(): i32 {
+    let value = this.get("status");
+    return value.toI32();
+  }
+
+  set status(value: i32) {
+    this.set("status", Value.fromI32(value));
+  }
+
+  get cTokenAddress(): Bytes {
+    let value = this.get("cTokenAddress");
+    return value.toBytes();
+  }
+
+  set cTokenAddress(value: Bytes) {
+    this.set("cTokenAddress", Value.fromBytes(value));
+  }
+
+  get cTokenTotalSupply(): Bytes {
+    let value = this.get("cTokenTotalSupply");
+    return value.toBytes();
+  }
+
+  set cTokenTotalSupply(value: Bytes) {
+    this.set("cTokenTotalSupply", Value.fromBytes(value));
+  }
+
+  get cTokenHolders(): Array<string> | null {
+    let value = this.get("cTokenHolders");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set cTokenHolders(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("cTokenHolders");
+    } else {
+      this.set("cTokenHolders", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get pTokenAddress(): Bytes {
+    let value = this.get("pTokenAddress");
+    return value.toBytes();
+  }
+
+  set pTokenAddress(value: Bytes) {
+    this.set("pTokenAddress", Value.fromBytes(value));
+  }
+
+  get pTokenTotalSupply(): Bytes {
+    let value = this.get("pTokenTotalSupply");
+    return value.toBytes();
+  }
+
+  set pTokenTotalSupply(value: Bytes) {
+    this.set("pTokenTotalSupply", Value.fromBytes(value));
+  }
+
+  get pTokenHolders(): Array<string> | null {
+    let value = this.get("pTokenHolders");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set pTokenHolders(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("pTokenHolders");
+    } else {
+      this.set("pTokenHolders", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get tokenHolder(): string | null {
+    let value = this.get("tokenHolder");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenHolder(value: string | null) {
+    if (value === null) {
+      this.unset("tokenHolder");
+    } else {
+      this.set("tokenHolder", Value.fromString(value as string));
+    }
+  }
+
+  get capTable(): string | null {
+    let value = this.get("capTable");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set capTable(value: string | null) {
+    if (value === null) {
+      this.unset("capTable");
+    } else {
+      this.set("capTable", Value.fromString(value as string));
+    }
+  }
+}
+
+export class ERC20TokenHolder extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ERC20TokenHolder entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ERC20TokenHolder entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ERC20TokenHolder", id.toString(), this);
+  }
+
+  static load(id: string): ERC20TokenHolder | null {
+    return store.get("ERC20TokenHolder", id) as ERC20TokenHolder | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get cTokenVault(): string | null {
+    let value = this.get("cTokenVault");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set cTokenVault(value: string | null) {
+    if (value === null) {
+      this.unset("cTokenVault");
+    } else {
+      this.set("cTokenVault", Value.fromString(value as string));
+    }
+  }
+
+  get pTokenVault(): string | null {
+    let value = this.get("pTokenVault");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set pTokenVault(value: string | null) {
+    if (value === null) {
+      this.unset("pTokenVault");
+    } else {
+      this.set("pTokenVault", Value.fromString(value as string));
+    }
+  }
+}

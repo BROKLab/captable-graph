@@ -8,7 +8,7 @@ dataSources:
     name: CapTableRegistry
     network: arbitrum-rinkeby
     source:
-      address: "0x42a7E57C4499b4C0A9A33d84673977F0Cfb8e7C1"
+      address: "0xc3E6Bc5f4E00f8dD8A9dC2434B931DD719dA3E4c"
       abi: CapTableRegistry
       startBlock: 4400000
     mapping:
@@ -72,3 +72,22 @@ templates:
   # - RevokedOperatorByPartition(indexed bytes32,indexed address,indexed address)
   # - Transfer(indexed address,indexed address,uint256)
   # - TransferByPartition(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
+  - name: Vault
+    kind: ethereum/contract
+    network: arbitrum-rinkeby
+    source:
+      abi: Vault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/vault.ts
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: fadfgsd(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleTransferByPartition

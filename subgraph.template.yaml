@@ -72,3 +72,22 @@ templates:
   # - RevokedOperatorByPartition(indexed bytes32,indexed address,indexed address)
   # - Transfer(indexed address,indexed address,uint256)
   # - TransferByPartition(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
+  - name: Vault
+    kind: ethereum/contract
+    network: arbitrum-rinkeby
+    source:
+      abi: Vault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/vault.ts
+      entities:
+        - CapTable
+        - TokenBalance
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: fadfgsd(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleTransferByPartition

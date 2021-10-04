@@ -2,7 +2,7 @@
   "name": "captable",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen",
+    "codegen": "yarn brokTest:prepare && graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ brok/captable",
     "local:create": "graph create --node http://localhost:8020/ brok/captable",

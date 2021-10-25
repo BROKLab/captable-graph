@@ -35,6 +35,7 @@ type CapTable @entity {
   registry: CapTableRegistry
   totalSupply: BigInt!
   owner: Bytes!
+  boardDirector: Bytes!
   minter: Bytes!
   controllers: [Bytes!]
   orgnr: String!

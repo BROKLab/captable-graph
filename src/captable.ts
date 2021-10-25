@@ -1,5 +1,5 @@
 import { Bytes, dataSource, log } from "@graphprotocol/graph-ts";
-import { ERC1400 } from "../generated/CapTableRegistry/ERC1400";
+import { CapTable } from "../generated/templates/CapTable/CapTable";
 import {
   CapTable as CapTableSchema,
   TokenHolder,
@@ -9,7 +9,7 @@ import {
   IssuedByPartition,
   RedeemedByPartition,
   TransferByPartition,
-} from "../generated/templates/CapTable/ERC1400";
+} from "../generated/templates/CapTable/CapTable";
 
 let context = dataSource.context();
 let capTableRegistryId = context.getString("capTableRegistryId");
@@ -19,7 +19,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
   let capTable = CapTableSchema.load(event.address.toHexString());
   if (capTable == null) {
     capTable = new CapTableSchema(event.address.toHexString());
-    let contract = ERC1400.bind(event.address);
+    let contract = CapTable.bind(event.address);
     let owner = contract.owner();
     let partitionsBytes = contract.totalPartitions();
     let partitions: Array<String> = [];
@@ -34,6 +34,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable.minter = owner;
     capTable.status = "QUED";
     capTable.registry = capTableRegistryId;
+    capTable.boardDirector = contract.boardDirector();
     capTable.owner = owner;
     capTable.totalSupply = contract.totalSupply();
     let controllers = contract.controllers() as Array<Bytes>;

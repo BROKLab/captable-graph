@@ -7,9 +7,9 @@
     "local:create": "graph create --node http://localhost:8020/ brok/captable",
     "local:remove": "graph remove --node http://localhost:8020/ brok/captable",
     "local:deploy": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 brok/captable",
-    "brokTest:deploy": "yarn brokTest:prepare && graph deploy --product hosted-service broklab/captable_test_02",
-    "brokTest:prepare": "mustache config/brokTest.json subgraph.template.yaml > subgraph.yaml",
-    "brokStage:deploy": "yarn brokStage:prepare && graph deploy --product hosted-service  broklab/captable_stage_02",
+    "brokDev:deploy": "yarn brokDev:prepare && graph deploy --product hosted-service broklab/captable_dev_06",
+    "brokDev:prepare": "mustache config/brokDev.json subgraph.template.yaml > subgraph.yaml",
+    "brokStage:deploy": "yarn brokStage:prepare && graph deploy --product hosted-service  broklab/captable_stage_06",
     "brokStage:prepare": "mustache config/brokStage.json subgraph.template.yaml > subgraph.yaml"
   },
   "dependencies": {

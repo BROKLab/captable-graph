@@ -50,6 +50,32 @@ export class capTableDeclined__Params {
   }
 }
 
+export class capTableMigrate extends ethereum.Event {
+  get params(): capTableMigrate__Params {
+    return new capTableMigrate__Params(this);
+  }
+}
+
+export class capTableMigrate__Params {
+  _event: capTableMigrate;
+
+  constructor(event: capTableMigrate) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get id(): Bytes {
+    return this._event.parameters[2].value.toBytes();
+  }
+}
+
 export class capTableQued extends ethereum.Event {
   get params(): capTableQued__Params {
     return new capTableQued__Params(this);
@@ -184,6 +210,29 @@ export class CapTableRegistry extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  getMigrationAddress(id: Bytes): Address {
+    let result = super.call(
+      "getMigrationAddress",
+      "getMigrationAddress(bytes32):(address)",
+      [ethereum.Value.fromFixedBytes(id)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getMigrationAddress(id: Bytes): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getMigrationAddress",
+      "getMigrationAddress(bytes32):(address)",
+      [ethereum.Value.fromFixedBytes(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getQuedCount(): BigInt {
@@ -349,6 +398,36 @@ export class DeclineCall__Outputs {
   _call: DeclineCall;
 
   constructor(call: DeclineCall) {
+    this._call = call;
+  }
+}
+
+export class MigrateCaptableCall extends ethereum.Call {
+  get inputs(): MigrateCaptableCall__Inputs {
+    return new MigrateCaptableCall__Inputs(this);
+  }
+
+  get outputs(): MigrateCaptableCall__Outputs {
+    return new MigrateCaptableCall__Outputs(this);
+  }
+}
+
+export class MigrateCaptableCall__Inputs {
+  _call: MigrateCaptableCall;
+
+  constructor(call: MigrateCaptableCall) {
+    this._call = call;
+  }
+
+  get id(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+}
+
+export class MigrateCaptableCall__Outputs {
+  _call: MigrateCaptableCall;
+
+  constructor(call: MigrateCaptableCall) {
     this._call = call;
   }
 }

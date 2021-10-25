@@ -179,6 +179,15 @@ export class CapTable extends Entity {
     this.set("owner", Value.fromBytes(value));
   }
 
+  get boardDirector(): Bytes {
+    let value = this.get("boardDirector");
+    return value.toBytes();
+  }
+
+  set boardDirector(value: Bytes) {
+    this.set("boardDirector", Value.fromBytes(value));
+  }
+
   get minter(): Bytes {
     let value = this.get("minter");
     return value.toBytes();

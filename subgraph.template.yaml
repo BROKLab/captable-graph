@@ -10,10 +10,10 @@ dataSources:
     source:
       address: "{{address}}"
       abi: CapTableRegistry
-      startBlock: 5600000
+      startBlock: 5867110
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/capTableRegistry.ts
       entities:
@@ -39,7 +39,7 @@ templates:
       abi: CapTable
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/captable.ts
       entities:

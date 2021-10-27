@@ -8,12 +8,12 @@ dataSources:
     name: CapTableRegistry
     network: arbitrum-rinkeby
     source:
-      address: "0x9b17899AA5c03fF08d6E82C3D1E18A3b4bC85928"
+      address: "0xcc0180C2F5E225Bd9d0E5e6378C00e58FBce3E8e"
       abi: CapTableRegistry
-      startBlock: 5600000
+      startBlock: 5867110
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: CapTableRegistry/CapTableRegistry.wasm
       entities:
@@ -38,7 +38,7 @@ templates:
       abi: CapTable
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: templates/CapTable/CapTable.wasm
       entities:

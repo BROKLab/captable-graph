@@ -21,6 +21,7 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable = new CapTableSchema(event.address.toHexString());
     let contract = CapTable.bind(event.address);
     let owner = contract.owner();
+    let boardDirector = contract.boardDirector();
     let partitionsBytes = contract.totalPartitions();
     let partitions: Array<String> = [];
     for (let i = 0; i < partitionsBytes.length; i++) {
@@ -34,13 +35,12 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable.minter = owner;
     capTable.status = "QUED";
     capTable.registry = capTableRegistryId;
-    capTable.boardDirector = contract.boardDirector();
+    capTable.boardDirector = boardDirector;
     capTable.owner = owner;
     capTable.totalSupply = contract.totalSupply();
-    let controllers = contract.controllers() as Array<Bytes>;
-    if (controllers) {
-      capTable.controllers = controllers;
-    }
+
+    let _controllers = contract.controllers().map<Bytes>((a) => a as Bytes);
+    capTable.controllers = _controllers;
     capTable.save();
   }
 
@@ -98,6 +98,7 @@ export function handleTransferByPartition(event: TransferByPartition): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "fromBalance in handleTransferByPartition should always exist. ",
     ]);
+    return;
   }
   fromBalance.amount = fromBalance.amount.minus(event.params.value);
   fromBalance.save();
@@ -154,6 +155,7 @@ export function handleRedeemByPartition(event: RedeemedByPartition): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "fromBalance in handleRedeemByPartition should always exist. ",
     ]);
+    return;
   }
   fromBalance.amount = fromBalance.amount.minus(event.params.value);
   fromBalance.save();

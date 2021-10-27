@@ -1,6 +1,5 @@
 import { BigInt, DataSourceContext, log } from "@graphprotocol/graph-ts";
 import {
-  CapTableRegistry,
   capTableQued,
   capTableRemoved,
   capTableDeclined,
@@ -48,9 +47,10 @@ export function handleCapTableApproved(event: capTableApproved): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "capTable in handleCapTableApproved should always exist.",
     ]);
+    return;
   }
   let seperatorIndex = capTable.orgnr.indexOf("_") + 1;
-  capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
+  if (seperatorIndex) capTable.orgnr = capTable.orgnr.slice(seperatorIndex);
   capTable.status = "APPROVED";
   capTable.save();
 }
@@ -62,6 +62,7 @@ export function handlecapTableRemoved(event: capTableRemoved): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "capTable in handleCapTableApproved should always exist.",
     ]);
+    return;
   }
   capTable.orgnr = "REMOVED_" + capTable.orgnr;
   capTable.status = "REMOVED";
@@ -75,6 +76,7 @@ export function handleCapTableDeclined(event: capTableDeclined): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "capTable in handleCapTableApproved should always exist.",
     ]);
+    return;
   }
   let seperatorIndex = capTable.orgnr.indexOf("_");
   capTable.orgnr = capTable.orgnr.slice(seperatorIndex);

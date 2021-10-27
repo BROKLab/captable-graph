@@ -8,12 +8,12 @@ dataSources:
     name: CapTableRegistry
     network: arbitrum-rinkeby
     source:
-      address: "0x42a7E57C4499b4C0A9A33d84673977F0Cfb8e7C1"
+      address: "0xcc0180C2F5E225Bd9d0E5e6378C00e58FBce3E8e"
       abi: CapTableRegistry
-      startBlock: 4400000
+      startBlock: 5867110
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/capTableRegistry.ts
       entities:
@@ -36,18 +36,18 @@ templates:
     kind: ethereum/contract
     network: arbitrum-rinkeby
     source:
-      abi: ERC1400
+      abi: CapTable
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/captable.ts
       entities:
         - CapTable
         - TokenBalance
       abis:
-        - name: ERC1400
-          file: ./abis/ERC1400.json
+        - name: CapTable
+          file: ./abis/CapTable.json
       eventHandlers:
         - event: TransferByPartition(indexed bytes32,address,indexed address,indexed address,uint256,bytes,bytes)
           handler: handleTransferByPartition

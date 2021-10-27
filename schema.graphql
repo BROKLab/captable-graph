@@ -35,8 +35,9 @@ type CapTable @entity {
   registry: CapTableRegistry
   totalSupply: BigInt!
   owner: Bytes!
+  boardDirector: Bytes!
   minter: Bytes!
-  controllers: [Bytes!]
+  controllers: [Bytes!]!
   orgnr: String!
   tokenHolders: [TokenHolder!] @derivedFrom(field: "capTable")
 }

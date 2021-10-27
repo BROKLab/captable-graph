@@ -472,7 +472,7 @@ export class TransferByPartition__Params {
   }
 }
 
-export class ERC1400__getDocumentResult {
+export class CapTable__getDocumentResult {
   value0: string;
   value1: Bytes;
 
@@ -489,9 +489,9 @@ export class ERC1400__getDocumentResult {
   }
 }
 
-export class ERC1400 extends ethereum.SmartContract {
-  static bind(address: Address): ERC1400 {
-    return new ERC1400("ERC1400", address);
+export class CapTable extends ethereum.SmartContract {
+  static bind(address: Address): CapTable {
+    return new CapTable("CapTable", address);
   }
 
   allowance(owner: Address, spender: Address): BigInt {
@@ -667,6 +667,25 @@ export class ERC1400 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  boardDirector(): Address {
+    let result = super.call("boardDirector", "boardDirector():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_boardDirector(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "boardDirector",
+      "boardDirector():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   canImplementInterfaceForAddress(
     interfaceHash: Bytes,
     param1: Address
@@ -780,14 +799,14 @@ export class ERC1400 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytesArray());
   }
 
-  getDocument(name: Bytes): ERC1400__getDocumentResult {
+  getDocument(name: Bytes): CapTable__getDocumentResult {
     let result = super.call(
       "getDocument",
       "getDocument(bytes32):(string,bytes32)",
       [ethereum.Value.fromFixedBytes(name)]
     );
 
-    return new ERC1400__getDocumentResult(
+    return new CapTable__getDocumentResult(
       result[0].toString(),
       result[1].toBytes()
     );
@@ -795,7 +814,7 @@ export class ERC1400 extends ethereum.SmartContract {
 
   try_getDocument(
     name: Bytes
-  ): ethereum.CallResult<ERC1400__getDocumentResult> {
+  ): ethereum.CallResult<CapTable__getDocumentResult> {
     let result = super.tryCall(
       "getDocument",
       "getDocument(bytes32):(string,bytes32)",
@@ -806,7 +825,7 @@ export class ERC1400 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new ERC1400__getDocumentResult(value[0].toString(), value[1].toBytes())
+      new CapTable__getDocumentResult(value[0].toString(), value[1].toBytes())
     );
   }
 
@@ -938,21 +957,6 @@ export class ERC1400 extends ethereum.SmartContract {
         ethereum.Value.fromAddress(tokenHolder)
       ]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  isOwner(): boolean {
-    let result = super.call("isOwner", "isOwner():(bool)", []);
-
-    return result[0].toBoolean();
-  }
-
-  try_isOwner(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("isOwner", "isOwner():(bool)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1978,6 +1982,36 @@ export class RevokeOperatorByPartitionCall__Outputs {
   }
 }
 
+export class SetBoardDirectorCall extends ethereum.Call {
+  get inputs(): SetBoardDirectorCall__Inputs {
+    return new SetBoardDirectorCall__Inputs(this);
+  }
+
+  get outputs(): SetBoardDirectorCall__Outputs {
+    return new SetBoardDirectorCall__Outputs(this);
+  }
+}
+
+export class SetBoardDirectorCall__Inputs {
+  _call: SetBoardDirectorCall;
+
+  constructor(call: SetBoardDirectorCall) {
+    this._call = call;
+  }
+
+  get newBoardDirector(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetBoardDirectorCall__Outputs {
+  _call: SetBoardDirectorCall;
+
+  constructor(call: SetBoardDirectorCall) {
+    this._call = call;
+  }
+}
+
 export class SetControllersCall extends ethereum.Call {
   get inputs(): SetControllersCall__Inputs {
     return new SetControllersCall__Inputs(this);
@@ -2072,6 +2106,40 @@ export class SetDocumentCall__Outputs {
   _call: SetDocumentCall;
 
   constructor(call: SetDocumentCall) {
+    this._call = call;
+  }
+}
+
+export class SetNameAndSymbolCall extends ethereum.Call {
+  get inputs(): SetNameAndSymbolCall__Inputs {
+    return new SetNameAndSymbolCall__Inputs(this);
+  }
+
+  get outputs(): SetNameAndSymbolCall__Outputs {
+    return new SetNameAndSymbolCall__Outputs(this);
+  }
+}
+
+export class SetNameAndSymbolCall__Inputs {
+  _call: SetNameAndSymbolCall;
+
+  constructor(call: SetNameAndSymbolCall) {
+    this._call = call;
+  }
+
+  get name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get symbol(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class SetNameAndSymbolCall__Outputs {
+  _call: SetNameAndSymbolCall;
+
+  constructor(call: SetNameAndSymbolCall) {
     this._call = call;
   }
 }

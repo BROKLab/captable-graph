@@ -16,26 +16,33 @@ export class CapTableRegistry extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("count", Value.fromBigInt(BigInt.zero()));
+    this.set("address", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save CapTableRegistry entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CapTableRegistry entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CapTableRegistry", id.toString(), this);
+    assert(id != null, "Cannot save CapTableRegistry entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save CapTableRegistry entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("CapTableRegistry", id.toString(), this);
+    }
   }
 
   static load(id: string): CapTableRegistry | null {
-    return store.get("CapTableRegistry", id) as CapTableRegistry | null;
+    return changetype<CapTableRegistry | null>(
+      store.get("CapTableRegistry", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -44,7 +51,7 @@ export class CapTableRegistry extends Entity {
 
   get count(): BigInt {
     let value = this.get("count");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set count(value: BigInt) {
@@ -53,7 +60,7 @@ export class CapTableRegistry extends Entity {
 
   get capTables(): Array<string> {
     let value = this.get("capTables");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set capTables(value: Array<string>) {
@@ -62,7 +69,7 @@ export class CapTableRegistry extends Entity {
 
   get address(): Bytes {
     let value = this.get("address");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set address(value: Bytes) {
@@ -74,26 +81,38 @@ export class CapTable extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("name", Value.fromString(""));
+    this.set("symbol", Value.fromString(""));
+    this.set("status", Value.fromString(""));
+    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
+    this.set("owner", Value.fromBytes(Bytes.empty()));
+    this.set("boardDirector", Value.fromBytes(Bytes.empty()));
+    this.set("minter", Value.fromBytes(Bytes.empty()));
+    this.set("controllers", Value.fromBytesArray(new Array(0)));
+    this.set("orgnr", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save CapTable entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CapTable entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CapTable", id.toString(), this);
+    assert(id != null, "Cannot save CapTable entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save CapTable entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("CapTable", id.toString(), this);
+    }
   }
 
   static load(id: string): CapTable | null {
-    return store.get("CapTable", id) as CapTable | null;
+    return changetype<CapTable | null>(store.get("CapTable", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -102,7 +121,7 @@ export class CapTable extends Entity {
 
   get name(): string {
     let value = this.get("name");
-    return value.toString();
+    return value!.toString();
   }
 
   set name(value: string) {
@@ -111,7 +130,7 @@ export class CapTable extends Entity {
 
   get symbol(): string {
     let value = this.get("symbol");
-    return value.toString();
+    return value!.toString();
   }
 
   set symbol(value: string) {
@@ -120,7 +139,7 @@ export class CapTable extends Entity {
 
   get partitions(): Array<string> | null {
     let value = this.get("partitions");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -128,16 +147,16 @@ export class CapTable extends Entity {
   }
 
   set partitions(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("partitions");
     } else {
-      this.set("partitions", Value.fromStringArray(value as Array<string>));
+      this.set("partitions", Value.fromStringArray(<Array<string>>value));
     }
   }
 
   get status(): string {
     let value = this.get("status");
-    return value.toString();
+    return value!.toString();
   }
 
   set status(value: string) {
@@ -146,7 +165,7 @@ export class CapTable extends Entity {
 
   get registry(): string | null {
     let value = this.get("registry");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -154,16 +173,16 @@ export class CapTable extends Entity {
   }
 
   set registry(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("registry");
     } else {
-      this.set("registry", Value.fromString(value as string));
+      this.set("registry", Value.fromString(<string>value));
     }
   }
 
   get totalSupply(): BigInt {
     let value = this.get("totalSupply");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set totalSupply(value: BigInt) {
@@ -172,42 +191,43 @@ export class CapTable extends Entity {
 
   get owner(): Bytes {
     let value = this.get("owner");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set owner(value: Bytes) {
     this.set("owner", Value.fromBytes(value));
   }
 
+  get boardDirector(): Bytes {
+    let value = this.get("boardDirector");
+    return value!.toBytes();
+  }
+
+  set boardDirector(value: Bytes) {
+    this.set("boardDirector", Value.fromBytes(value));
+  }
+
   get minter(): Bytes {
     let value = this.get("minter");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set minter(value: Bytes) {
     this.set("minter", Value.fromBytes(value));
   }
 
-  get controllers(): Array<Bytes> | null {
+  get controllers(): Array<Bytes> {
     let value = this.get("controllers");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytesArray();
-    }
+    return value!.toBytesArray();
   }
 
-  set controllers(value: Array<Bytes> | null) {
-    if (value === null) {
-      this.unset("controllers");
-    } else {
-      this.set("controllers", Value.fromBytesArray(value as Array<Bytes>));
-    }
+  set controllers(value: Array<Bytes>) {
+    this.set("controllers", Value.fromBytesArray(value));
   }
 
   get orgnr(): string {
     let value = this.get("orgnr");
-    return value.toString();
+    return value!.toString();
   }
 
   set orgnr(value: string) {
@@ -216,7 +236,7 @@ export class CapTable extends Entity {
 
   get tokenHolders(): Array<string> | null {
     let value = this.get("tokenHolders");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -224,10 +244,10 @@ export class CapTable extends Entity {
   }
 
   set tokenHolders(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenHolders");
     } else {
-      this.set("tokenHolders", Value.fromStringArray(value as Array<string>));
+      this.set("tokenHolders", Value.fromStringArray(<Array<string>>value));
     }
   }
 }
@@ -236,26 +256,30 @@ export class TokenHolder extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save TokenHolder entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save TokenHolder entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("TokenHolder", id.toString(), this);
+    assert(id != null, "Cannot save TokenHolder entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save TokenHolder entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("TokenHolder", id.toString(), this);
+    }
   }
 
   static load(id: string): TokenHolder | null {
-    return store.get("TokenHolder", id) as TokenHolder | null;
+    return changetype<TokenHolder | null>(store.get("TokenHolder", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -264,7 +288,7 @@ export class TokenHolder extends Entity {
 
   get capTable(): string | null {
     let value = this.get("capTable");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -272,16 +296,16 @@ export class TokenHolder extends Entity {
   }
 
   set capTable(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("capTable");
     } else {
-      this.set("capTable", Value.fromString(value as string));
+      this.set("capTable", Value.fromString(<string>value));
     }
   }
 
   get address(): Bytes {
     let value = this.get("address");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set address(value: Bytes) {
@@ -290,7 +314,7 @@ export class TokenHolder extends Entity {
 
   get balances(): Array<string> | null {
     let value = this.get("balances");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -298,10 +322,10 @@ export class TokenHolder extends Entity {
   }
 
   set balances(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("balances");
     } else {
-      this.set("balances", Value.fromStringArray(value as Array<string>));
+      this.set("balances", Value.fromStringArray(<Array<string>>value));
     }
   }
 }
@@ -310,26 +334,31 @@ export class Balance extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+    this.set("partition", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Balance entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Balance entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Balance", id.toString(), this);
+    assert(id != null, "Cannot save Balance entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Balance entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Balance", id.toString(), this);
+    }
   }
 
   static load(id: string): Balance | null {
-    return store.get("Balance", id) as Balance | null;
+    return changetype<Balance | null>(store.get("Balance", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -338,7 +367,7 @@ export class Balance extends Entity {
 
   get amount(): BigInt {
     let value = this.get("amount");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set amount(value: BigInt) {
@@ -347,7 +376,7 @@ export class Balance extends Entity {
 
   get partition(): string {
     let value = this.get("partition");
-    return value.toString();
+    return value!.toString();
   }
 
   set partition(value: string) {
@@ -356,7 +385,7 @@ export class Balance extends Entity {
 
   get tokenHolder(): string | null {
     let value = this.get("tokenHolder");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -364,16 +393,16 @@ export class Balance extends Entity {
   }
 
   set tokenHolder(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokenHolder");
     } else {
-      this.set("tokenHolder", Value.fromString(value as string));
+      this.set("tokenHolder", Value.fromString(<string>value));
     }
   }
 
   get capTable(): string | null {
     let value = this.get("capTable");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -381,10 +410,10 @@ export class Balance extends Entity {
   }
 
   set capTable(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("capTable");
     } else {
-      this.set("capTable", Value.fromString(value as string));
+      this.set("capTable", Value.fromString(<string>value));
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Bytes, dataSource, log } from "@graphprotocol/graph-ts";
-import { ERC1400 } from "../generated/CapTableRegistry/ERC1400";
+import { CapTable } from "../generated/templates/CapTable/CapTable";
 import {
   CapTable as CapTableSchema,
   TokenHolder,
@@ -9,7 +9,7 @@ import {
   IssuedByPartition,
   RedeemedByPartition,
   TransferByPartition,
-} from "../generated/templates/CapTable/ERC1400";
+} from "../generated/templates/CapTable/CapTable";
 
 let context = dataSource.context();
 let capTableRegistryId = context.getString("capTableRegistryId");
@@ -19,8 +19,9 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
   let capTable = CapTableSchema.load(event.address.toHexString());
   if (capTable == null) {
     capTable = new CapTableSchema(event.address.toHexString());
-    let contract = ERC1400.bind(event.address);
+    let contract = CapTable.bind(event.address);
     let owner = contract.owner();
+    let boardDirector = contract.boardDirector();
     let partitionsBytes = contract.totalPartitions();
     let partitions: Array<String> = [];
     for (let i = 0; i < partitionsBytes.length; i++) {
@@ -34,12 +35,12 @@ export function handleIssuedByPartition(event: IssuedByPartition): void {
     capTable.minter = owner;
     capTable.status = "QUED";
     capTable.registry = capTableRegistryId;
+    capTable.boardDirector = boardDirector;
     capTable.owner = owner;
     capTable.totalSupply = contract.totalSupply();
-    let controllers = contract.controllers() as Array<Bytes>;
-    if (controllers) {
-      capTable.controllers = controllers;
-    }
+
+    let _controllers = contract.controllers().map<Bytes>((a) => a as Bytes);
+    capTable.controllers = _controllers;
     capTable.save();
   }
 
@@ -97,6 +98,7 @@ export function handleTransferByPartition(event: TransferByPartition): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "fromBalance in handleTransferByPartition should always exist. ",
     ]);
+    return;
   }
   fromBalance.amount = fromBalance.amount.minus(event.params.value);
   fromBalance.save();
@@ -153,6 +155,7 @@ export function handleRedeemByPartition(event: RedeemedByPartition): void {
     log.critical("LOGICAL SMART CONTRACT ERROR {}", [
       "fromBalance in handleRedeemByPartition should always exist. ",
     ]);
+    return;
   }
   fromBalance.amount = fromBalance.amount.minus(event.params.value);
   fromBalance.save();
